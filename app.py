@@ -25,7 +25,6 @@ ticker_input = st.sidebar.text_input(
 )
 tickers = [t.strip().upper() for t in ticker_input.split(",")]
 
-# Auto-set dates dynamically to ensure reliable historical pulling windows
 start_date = st.sidebar.date_input("Backtest Start Date", pd.to_datetime("2025-01-01"))
 end_date = st.sidebar.date_input("Backtest End Date", pd.to_datetime("2026-07-15"))
 
@@ -74,6 +73,7 @@ if run_pipeline:
                     
                     np.random.seed(42) 
                     ticker_df['News_Sentiment'] = np.random.uniform(-0.4, 0.7, size=len(ticker_df))
+                    
                     ticker_df['Target'] = ticker_df['Close'].shift(-1)
                     ticker_df = ticker_df.dropna()
                     
@@ -83,7 +83,7 @@ if run_pipeline:
                     model = LinearRegression()
                     model.fit(X, y)
                     
-                    latest_sentiment = np.random.uniform(-0.2, 0.8)
+                    latest_sentiment = np.random.uniform(-0.2, 0.8) 
                     latest_features = [[ticker_df['Close'].iloc[-1], ticker_df['Close'].rolling(5).mean().iloc[-1], latest_sentiment]]
                     prediction = model.predict(latest_features)
                     
@@ -134,7 +134,7 @@ if run_pipeline:
                 if total_w > 0:
                     df_weights["Optimal Allocation Weight"] = df_weights["Optimal Allocation Weight"] / total_w
                 else:
-                    df_weights["Optimal Allocation Weight"] = 1.0 / len(df_weights)
+                    df_weights["Optimal Allocation Weight"] = 1.0 / len(df_weights) 
                 
                 c1, c2 = st.columns()
                 with c1:
@@ -168,9 +168,9 @@ if run_pipeline:
                     
                     if current_pos == 1.0:
                         if raw_ret <= stop_loss:
-                            target_pos = 0.0
+                            target_pos = 0.0  
                         elif raw_ret >= take_profit:
-                            target_pos = 0.0
+                            target_pos = 0.0  
                     
                     fee = fee_rate if target_pos != current_pos else 0.0
                     day_net = (raw_ret * current_pos) - fee
